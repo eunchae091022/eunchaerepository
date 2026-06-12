@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이은채 | Portfolio</title>
+    <style>
+        /* ==========================================================================
+           1. DESIGN SYSTEM & RESET (디자인 시스템 및 초기화)
+           ========================================================================== */
+        :root {
+            /* 주 색상 설정: 핑크 + 크림 + 보라 + 남색 (디즈니 애니메이션 콘셉트) */
+            --color-bg-dark: #0B0F26;      /* 깊은 밤하늘 같은 남색 */
+            --color-purple: #3A1C5C;       /* 마법 같은 보라색 */
+            --color-pink: #FF7597;         /* 러블리한 핑크색 */
+            --color-pink-light: #FFB3C6;   /* 부드러운 연핑크 */
+            --color-cream: #FFF8F0;        /* 따뜻한 크림색 */
+            --color-card-bg: rgba(255, 248, 240, 0.08); /* 반투명 크림색 (글래스모피즘) */
+            --color-card-border: rgba(255, 117, 151, 0.2);
+            
+            /* 폰트 및 그림자 */
+            --font-main: 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 20px 40px rgba(255, 117, 151, 0.15);
+            --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg-dark);
+            color: var(--color-cream);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 스크롤바 디자인 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-pink);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-pink-light);
+        }
+
+        /* 공통 레이아웃 구조 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 8rem 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* 섹션 공통 제목 스타일 */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--color-cream);
+            text-shadow: 0 0 15px rgba(255, 117, 151, 0.6);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '✨';
+            display: block;
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        /* ==========================================================================
+           2. BACKGROUND ANIMATIONS (배경 효과 및 애니메이션)
+           ========================================================================== */
+        /* 디즈니 감성의 오로라 융합 그라데이션 배경 */
+        .bg-glow-container {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -2;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0B0F26 0%, #1A0B2E 50%, #2D0B2E 100%);
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            mix-blend-mode: screen;
+            animation: orbMove 20s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--color-pink);
+            top: -10%;
+            left: -10%;
+            animation-duration: 25s;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--color-purple);
+            bottom: -20%;
+            right: -10%;
+            animation-duration: 30s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: #4A47A3;
+            top: 40%;
+            left: 50%;
+            animation-duration: 20s;
+        }
+
+        /* 반짝이는 별 효과 정의 */
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes orbMove {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.2); }
+            100% { transform: translate(-50px, 120px) scale(0.9); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); text-shadow: 0 0 10px #fff; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Scroll Reveal (스크롤 등장 효과를 위한 초기 상태) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           3. HERO SECTION (첫 화면)
+           ========================================================================== */
+        #hero {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* 디즈니 성 느낌의 실루엣 그래픽 대신 아이콘 아트워크 구현 */
+        .hero-castle-icon {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            animation: float 4s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 15px var(--color-pink));
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--color-cream), var(--color-pink-light), #E0AAFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .hero-subtitle {
+            font-size: 2rem;
+            font-weight: 400;
+            min-height: 3.5rem; /* 타이핑 시 덜컹거림 방지 */
+            color: var(--color-pink-light);
+            text-shadow: 0 2px 10px rgba(255, 117, 151, 0.4);
+        }
+
+        /* 타이핑 커서 애니메이션 */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: var(--color-pink-light);
+            margin-left: 5px;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* 하단 스크롤 유도 아이콘 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: rgba(255,248,240,0.6);
+            letter-spacing: 2px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -10px); }
+            60% { transform: translate(-50%, -5px); }
+        }
+
+        /* ==========================================================================
+           4. ABOUT ME SECTION (프로필 카드)
+           ========================================================================== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        /* 고급스러운 글래스모피즘 카드 스타일 */
+        .profile-card {
+            background: var(--color-card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--color-card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: rotate(45deg);
+            transition: 0.8s;
+        }
+
+        .profile-card:hover::before {
+            left: 100%;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-pink);
+        }
+
+        /* 고양이 무드를 살린 가상 프로필 아바타 공간 */
+        .profile-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-pink), var(--color-purple));
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.5rem;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.4), var(--shadow-sm);
+        }
+
+        .profile-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--color-cream);
+        }
+
+        .profile-tag {
+            display: inline-block;
+            background: rgba(255, 117, 151, 0.2);
+            color: var(--color-pink-light);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 117, 151, 0.3);
+        }
+
+        .info-details {
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            background: rgba(255,255,255,0.03);
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--color-pink);
+        }
+
+        .info-label {
+            font-weight: 600;
+            width: 100px;
+            color: var(--color-pink-light);
+        }
+
+        .info-value {
+            color: var(--color-cream);
+        }
+
+        /* 소개 우측 텍스트 영역 */
+        .about-text-box {
+            padding: 1rem;
+        }
+
+        .about-text-box h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-pink-light);
+        }
+
+        .about-text-box p {
+            font-size: 1.1rem;
+            color: rgba(255, 248, 240, 0.8);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        /* ==========================================================================
+           5. MY SKILLS SECTION (역량 계량화 카드)
+           ========================================================================== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .skill-card {
+            background: var(--color-card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-smooth);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-pink-light);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-percentage {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-pink);
+        }
+
+        /* 가동적인 프로그레스 바 디자인 */
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.1);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--color-purple), var(--color-pink));
+            height: 100%;
+            width: 0%; /* JS 애니메이션 구동 */
+            border-radius: 6px;
+            transition: width 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        .skill-desc {
+            font-size: 0.9rem;
+            color: rgba(255,248,240,0.6);
+            margin-top: 0.8rem;
+        }
+
+        /* ==========================================================================
+           6. MY FAVORITES SECTION (관심사 카드 및 Hover)
+           ========================================================================== */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .fav-card {
+            background: var(--color-card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-card-border);
+            border-radius: 20px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* 마우스 호버 효과 극대화 */
+        .fav-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            background: rgba(255, 117, 151, 0.15);
+            border-color: var(--color-pink);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .fav-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .fav-card:hover .fav-icon {
+            transform: rotate(15deg) scale(1.2);
+        }
+
+        .fav-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .fav-sub {
+            font-size: 0.9rem;
+            color: rgba(255,248,240,0.5);
+        }
+
+        /* ==========================================================================
+           7. MY DREAM SECTION (꿈과 목표)
+           ========================================================================== */
+        .dream-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 3rem;
+            width: 100%;
+        }
+
+        .dream-card {
+            background: linear-gradient(135deg, rgba(58, 28, 92, 0.4), rgba(255, 117, 151, 0.1));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 117, 151, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dream-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255,117,151,0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .dream-badge {
+            display: inline-block;
+            background: var(--color-pink);
+            color: var(--color-bg-dark);
+            padding: 0.4rem 1.2rem;
+            font-weight: 700;
+            border-radius: 30px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(255, 117, 151, 0.4);
+        }
+
+        .dream-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--color-cream);
+        }
+
+        .dream-list {
+            list-style: none;
+        }
+
+        .dream-list li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: rgba(255,248,240,0.8);
+        }
+
+        .dream-list li::before {
+            content: '⭐';
+            position: absolute;
+            left: 0;
+            top: 0.1rem;
+            font-size: 1rem;
+        }
+
+        /* ==========================================================================
+           8. QUOTE SECTION (감성 인용구)
+           ========================================================================== */
+        .quote-box {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255, 248, 240, 0.1);
+            padding: 4rem 2rem;
+            border-radius: 30px;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .quote-box::before {
+            content: '“';
+            position: absolute;
+            top: 1rem;
+            left: 3rem;
+            font-size: 8rem;
+            color: rgba(255, 117, 151, 0.15);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .quote-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #FFF, var(--color-pink-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .quote-author {
+            font-size: 1.1rem;
+            color: rgba(255, 248, 240, 0.5);
+            letter-spacing: 2px;
+        }
+
+        /* ==========================================================================
+           9. FOOTER (하단 구성)
+           ========================================================================== */
+        footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            background: rgba(11, 15, 38, 0.6);
+            backdrop-filter: blur(5px);
+            font-size: 1rem;
+            color: rgba(255,248,240,0.4);
+        }
+
+        footer p {
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* ==========================================================================
+           10. RESPONSIVE DESIGN (모바일 최적화 반응형 미디어쿼리)
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .hero-title {
+                font-size: 3.8rem;
+            }
+            .hero-subtitle {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            section {
+                padding: 5rem 0;
+            }
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2.5rem;
+            }
+            .profile-card {
+                padding: 2rem 1.5rem;
+            }
+            .dream-container {
+                grid-template-columns: 1fr;
+            }
+            .quote-text {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <section id="hero">
+        <div class="hero-content">
+            <div class="hero-castle-icon">🏰</div>
+            <h1 class="hero-title">이은채</h1>
+            <div class="hero-subtitle"><span id="typing-text"></span><span class="typing-cursor"></span></div>
+        </div>
+        <div class="scroll-hint" onclick="scrollToAbout()">
+            <p>EXPLORE MORE</p>
+            <span>▼</span>
+        </div>
+    </section>
+
+    <section id="about" class="reveal">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-grid">
+                <div class="profile-card">
+                    <div class="profile-avatar">🐱</div>
+                    <h3 class="profile-name">이은채</h3>
+                    <span class="profile-tag">Dreamer & Sleeper</span>
+                    <div class="info-details">
+                        <div class="info-item">
+                            <span class="info-label">이름</span>
+                            <span class="info-value">이은채</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">관심 분야</span>
+                            <span class="info-value">고양이 (가장 완벽한 생명체)</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">성격 분위기</span>
+                            <span class="info-value">러블리 핑크빛 🌸</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-text-box">
+                    <h3>안녕하세요, 이은채입니다!</h3>
+                    <p>디즈니 애니메이션의 주인공처럼 언제나 나만의 특별한 상상을 채워나가는 것을 좋아합니다. 세상의 모든 고양이들에게 진심어린 애정을 쏟고 있으며, 세상에서 가장 평온하고 포근한 시간인 '잠자기'를 통해 매일 에너지를 가득 충전하고 있습니다.</p>
+                    <p>나를 표현하는 한 문장은 명쾌하게 <strong>"이은체다"</strong> 입니다. 누구와도 비교할 수 없는 독창적이고 소중한 은채만의 색깔로 미래를 그려나가는 중입니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="reveal">
+        <div class="container">
+            <h2 class="section-title">My Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-title">😴 잠자기 (꿀잠 자며 회복하기)</span>
+                        <span class="skill-percentage">100%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" data-percent="100%"></div>
+                    </div>
+                    <p class="skill-desc">언제 어디서든 머리만 대면 깊고 포근한 수면 속으로 빠져들 수 있는 독보적인 능력</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-title">🐈 고양이 마음 공감하기</span>
+                        <span class="skill-percentage">95%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" data-percent="95%"></div>
+                    </div>
+                    <p class="skill-desc">고양이의 야옹 소리와 행동만 보고도 무엇을 원하는지 빠르게 캐치해내는 감각</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-title">✨ 핑크빛 긍정 마인드 유지</span>
+                        <span class="skill-percentage">90%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" data-percent="90%"></div>
+                    </div>
+                    <p class="skill-desc">어려운 상황 속에서도 디즈니 영화처럼 행복한 결말을 상상하며 페이스 유지하기</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-title">📚 서울대 합격을 위한 집중력</span>
+                        <span class="skill-percentage">85%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" data-percent="85%"></div>
+                    </div>
+                    <p class="skill-desc">목표하는 대학으로 나아가기 위해 깨어있는 시간에 발휘하는 폭발적인 집중력</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="favorites" class="reveal">
+        <div class="container">
+            <h2 class="section-title">My Favorites</h2>
+            <div class="favorites-grid">
+                <div class="fav-card">
+                    <div class="fav-icon">🛌</div>
+                    <h3 class="fav-name">잠자기</h3>
+                    <p class="fav-sub">달콤한 꿈의 세계</p>
+                </div>
+                <div class="fav-card">
+                    <div class="fav-icon">🐈‍⬛</div>
+                    <h3 class="fav-name">고양이</h3>
+                    <p class="fav-sub">말랑말랑한 발바닥</p>
+                </div>
+                <div class="fav-card">
+                    <div class="fav-icon">🎨</div>
+                    <h3 class="fav-name">디즈니 감성</h3>
+                    <p class="fav-sub">마법 같은 색조와 동화</p>
+                </div>
+                <div class="fav-card">
+                    <div class="fav-icon">🧠</div>
+                    <h3 class="fav-name">상상하기</h3>
+                    <p class="fav-sub">나만의 은채 세계관</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dream" class="reveal">
+        <div class="container">
+            <h2 class="section-title">My Dream</h2>
+            <div class="dream-container">
+                <div class="dream-card">
+                    <span class="dream-badge">Challenge</span>
+                    <h3 class="dream-title">앞으로 해보고 싶은 것</h3>
+                    <ul class="dream-list">
+                        <li>중간에 한 번도 깨지 않고 완벽하게 20시간 숙면 취하기</li>
+                        <li>고양이들과 하루 종일 뒹굴거리며 힐링 타임 갖기</li>
+                        <li>디즈니월드에 방문해서 진짜 마법 성의 야경 구경하기</li>
+                    </ul>
+                </div>
+                <div class="dream-card">
+                    <span class="dream-badge">Ultimate Goal</span>
+                    <h3 class="dream-title">나의 꿈과 목표</h3>
+                    <ul class="dream-list">
+                        <li>끊임없이 성장하여 대한민국 최고의 상아탑, 서울대학교 합격하기</li>
+                        <li>나의 고유한 개성과 매력을 세상에 증명해 보이기</li>
+                        <li>은채만의 '핑크빛 무드'를 잃지 않고 언제나 행복한 어른이 되기</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="quote" class="reveal">
+        <div class="container">
+            <div class="quote-box">
+                <p class="quote-text">“이은체다.”</p>
+                <p class="quote-author">- 은채 포트폴리오 슬로건 중 -</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Made with AI & My Imagination</p>
+    </footer>
+
+    <script>
+        /* --------------------------------------------------------------------------
+           A. Typing Animation Effect (타이핑 애니메이션 구현)
+           -------------------------------------------------------------------------- */
+        const typingText = document.getElementById("typing-text");
+        const message = "이은체다";
+        let index = 0;
+
+        function playTypingAnimation() {
+            if (index < message.length) {
+                typingText.textContent += message.charAt(index);
+                index++;
+                setTimeout(playTypingAnimation, 250); // 한 글자가 적히는 속도 (밀리초)
+            } else {
+                // 타이핑 완성 후 3초 대기했다가 다시 처음부터 무한 반복
+                setTimeout(() => {
+                    typingText.textContent = "";
+                    index = 0;
+                    playTypingAnimation();
+                }, 3000);
+            }
+        }
+
+        // 페이지 로드가 완료되면 타이핑 애니메이션을 실행
+        window.addEventListener("DOMContentLoaded", playTypingAnimation);
+
+
+        /* --------------------------------------------------------------------------
+           B. Scroll Hint Navigation (하단 이동 네비게이션)
+           -------------------------------------------------------------------------- */
+        function scrollToAbout() {
+            document.getElementById("about").scrollIntoView({ behavior: "smooth" });
+        }
+
+
+        /* --------------------------------------------------------------------------
+           C. Dynamic Star Creation (밤하늘에 반짝이는 별 그래픽 난수 생성)
+           -------------------------------------------------------------------------- */
+        function createStars() {
+            const background = document.querySelector('.bg-glow-container');
+            const starCount = 60; // 생성할 별의 개수
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 크기 및 위치 무작위 배치
+                const size = Math.random() * 3 + 1; // 1px ~ 4px
+                const topPos = Math.random() * 100; // 0% ~ 100%
+                const leftPos = Math.random() * 100;
+                
+                // 반짝임 딜레이 무작위 설정
+                const animDelay = Math.random() * 5;
+
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${topPos}vh`;
+                star.style.left = `${leftPos}vw`;
+                star.style.animationDelay = `${animDelay}s`;
+
+                background.appendChild(star);
+            }
+        }
+        createStars();
+
+
+        /* --------------------------------------------------------------------------
+           D. Scroll Reveal & Progress Bar Control (스크롤 기반 등장 및 프로그레스 바 제어)
+           -------------------------------------------------------------------------- */
+        const reveals = document.querySelectorAll('.reveal');
+
+        function handleScrollReveal() {
+            const windowHeight = window.innerHeight;
+            
+            reveals.forEach(reveal => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                const elementVisible = 150; // 요소가 보이기 시작할 기준 높이
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+
+                    // 만약 현재 보이는 섹션이 스킬 섹션이라면 내부 게이지 바를 가동
+                    if (reveal.id === 'skills') {
+                        const progressBars = reveal.querySelectorAll('.progress-bar-fill');
+                        progressBars.forEach(bar => {
+                            const targetWidth = bar.getAttribute('data-percent');
+                            bar.style.width = targetWidth;
+                        });
+                    }
+                }
+            });
+        }
+
+        // 스크롤 이벤트 연결 및 초기 한 번 실행
+        window.addEventListener('scroll', handleScrollReveal);
+        window.addEventListener('load', handleScrollReveal);
+    </script>
+</body>
+</html>
